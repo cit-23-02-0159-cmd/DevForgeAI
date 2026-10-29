@@ -2,6 +2,13 @@
 
 An autonomous AI-powered software engineering platform, built in deliberate phases. **Phase 1** provides a runnable, responsive dashboard, a modular FastAPI service, a real PostgreSQL connectivity probe, and containerized infrastructure. It does not yet run AI agents or generate software.
 
+**Phase 2A is implemented:** persistent Projects CRUD, a Projects workspace,
+validation, and Alembic migrations. See [Projects Module](docs/projects.md).
+
+Local development uses backend port **8010**. Set
+`BACKEND_URL=http://localhost:8010` in `frontend/.env.local`.
+Compose retains its existing internal ports and configurable published ports.
+
 ## Architecture
 
 ```text
@@ -69,7 +76,8 @@ Requirements: Node.js 24 LTS, npm, Python 3.12+, and Docker Compose or a local P
    # macOS/Linux:
    .venv/bin/python -m pip install -r requirements-dev.lock
    .venv/bin/python -m pip install --no-deps -e .
-   .venv/bin/python -m uvicorn app.main:app --reload
+   .venv/bin/python -m alembic upgrade head
+   .venv/bin/python -m uvicorn app.main:app --reload --port 8010
    ```
 
    Windows commands, from `backend/`:
@@ -79,7 +87,8 @@ Requirements: Node.js 24 LTS, npm, Python 3.12+, and Docker Compose or a local P
    python -m venv .venv
    .\.venv\Scripts\python.exe -m pip install -r requirements-dev.lock
    .\.venv\Scripts\python.exe -m pip install --no-deps -e .
-   .\.venv\Scripts\python.exe -m uvicorn app.main:app --reload
+   .\.venv\Scripts\python.exe -m alembic upgrade head
+   .\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8010
    ```
 
 No shell activation is required. Run the backend from `backend/` so its `.env` is loaded. If using a password containing URL-special characters with local PostgreSQL, percent-encode the password in `DATABASE_URL`.
@@ -110,4 +119,4 @@ Dependency snapshots are in `package-lock.json`, `backend/requirements.lock` (ru
 
 Environment examples contain sample values only. `.env` files, dependency directories, and build artifacts are ignored. `BACKEND_URL` stays on the Next.js server; database credentials never enter client bundles. API errors do not expose database connection details. No external AI service or API key is needed.
 
-This is a local portfolio foundation, not a public multi-user service. Authentication, authorization, rate limiting, TLS termination, migrations, and business entities belong to subsequent phases. There are deliberately no invented project metrics, fake agent activity, or placeholder API handlers. PostgreSQL is exercised through an actual `SELECT 1` probe; application tables will be introduced with migrations when domain features are added.
+This is a local portfolio foundation, not a public multi-user service. Authentication, authorization, rate limiting, TLS termination, and multi-user features belong to subsequent phases. There are deliberately no invented project metrics, fake agent activity, or placeholder API handlers. PostgreSQL is exercised through an actual `SELECT 1` probe; projects are now persisted through Alembic migrations in Phase 2A.

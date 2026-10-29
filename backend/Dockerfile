@@ -3,6 +3,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 WORKDIR /app
 COPY pyproject.toml requirements.lock ./
 COPY app ./app
+COPY alembic.ini ./
+COPY migrations ./migrations
 RUN pip install --no-cache-dir -r requirements.lock && pip install --no-cache-dir --no-deps . \
     && useradd --create-home --uid 10001 devforge
 USER devforge

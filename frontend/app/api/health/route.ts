@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const response = await fetch(`${process.env.BACKEND_URL ?? "http://localhost:8000"}/health`, {
+    const response = await fetch(`${process.env.BACKEND_URL ?? "http://localhost:8010"}/health`, {
       cache: "no-store", signal: AbortSignal.timeout(5000),
     });
     if (![200, 503].includes(response.status)) throw new Error("Unexpected backend response");

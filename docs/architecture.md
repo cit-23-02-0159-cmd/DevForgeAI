@@ -1,8 +1,8 @@
-# Phase 1 architecture
+# DevForge AI architecture
 
 ## System boundary
 
-DevForge AI currently implements infrastructure visibility. Planned autonomous engineering features are presented as a roadmap and are not executable.
+DevForge AI implements infrastructure visibility and persistent Projects CRUD (Phase 2A). Planned autonomous engineering features are presented as a roadmap and are not executable.
 
 ```mermaid
 flowchart LR
@@ -31,13 +31,13 @@ The lifespan handler creates the engine once and disposes it on shutdown. Synchr
 
 `GET /health` returns `200` when PostgreSQL responds, or `503` when it cannot. The body includes `status`, `service`, `version`, and `database`. Driver messages and credentials are not exposed. `GET /health/live` returns `200` without querying PostgreSQL. `/docs` exposes generated OpenAPI documentation.
 
-CORS permits only configured origins and GET requests, without credentialed cross-origin requests. The dashboard proxy itself does not require CORS, but explicit CORS settings support direct API clients during development.
+CORS permits only configured origins and GET, POST, PATCH, DELETE requests, without credentialed cross-origin requests. The dashboard proxy itself does not require CORS, but explicit CORS settings support direct API clients during development.
 
 ## Database and deployment
 
 Compose starts PostgreSQL first, then the API after database readiness, then Next.js after API readiness. Health checks continue after startup. Compose dependency ordering does not restart a service automatically when a dependency becomes unhealthy; runtime outage reporting handles subsequent failures.
 
-PostgreSQL uses a named data volume. No domain tables or seed data are necessary for Phase 1. Introduce versioned migrations before adding domain models; do not create production schemas implicitly at API startup.
+PostgreSQL uses a named data volume. Alembic manages the projects table. Compose runs migrations before Uvicorn; local developers run `alembic upgrade head` explicitly. The API does not create schemas implicitly. See [Projects Module](projects.md) for the domain layers and API contract.
 
 Host ports bind to `127.0.0.1`. Container traffic uses service DNS (`backend`, `postgres`). Both application images run as non-root users. Secrets are injected via ignored environment files for local development; a future deployment should use its platform's secret manager.
 
@@ -45,4 +45,6 @@ Host ports bind to `127.0.0.1`. Container traffic uses service DNS (`backend`, `
 
 API tests cover success and degraded readiness, liveness, allowed and denied CORS origins, and database probe cleanup and failure handling. Frontend checks include ESLint, strict TypeScript, and a production build. Full database/container integration requires Docker or a running PostgreSQL installation.
 
-Future phases should introduce an application service layer and domain models alongside actual use cases, authentication before public exposure, migrations before persistence features, and job orchestration before AI execution. This foundation does not execute untrusted generated code.
+Phase 2A adds domain models, a service/repository layer, and migrations for Projects.
+Future phases should add authentication before public exposure and job orchestration
+before AI execution. This foundation does not execute untrusted generated code.

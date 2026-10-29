@@ -9,9 +9,14 @@
 - Docker Compose, persistent storage, environment examples, and documentation.
 - Backend health tests, frontend lint/type checks, and production build scripts.
 
-## Phase 2 — Project workspace
+## Phase 2A — Projects (implemented)
 
-Add authentication, ownership, project CRUD, versioned database migrations, requirement capture, and audit records. Establish API contracts and integration tests before adding autonomous execution.
+Persistent project CRUD, UUIDs, status tracking, Alembic migrations, a Projects UI,
+and backend regression tests. See [Projects Module](projects.md).
+
+## Remaining Phase 2 — Project workspace
+
+Add authentication, ownership, requirement capture, and audit records before autonomous execution.
 
 ## Phase 3 — Planning intelligence
 

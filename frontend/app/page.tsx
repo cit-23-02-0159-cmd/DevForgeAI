@@ -45,6 +45,7 @@ export default function Dashboard() {
         <div className="workspace-label">ENGINEERING WORKSPACE</div>
         <nav aria-label="Main navigation">
           <a className="nav-link active" href="#overview"><span>◈</span> Overview</a>
+          <a className="nav-link" href="/projects"><span>▦</span> Projects</a>
           <a className="nav-link" href="#platform"><span>▦</span> Platform status</a>
           <a className="nav-link" href="#roadmap"><span>↗</span> Roadmap</a>
         </nav>
